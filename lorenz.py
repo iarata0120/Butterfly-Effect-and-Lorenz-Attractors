@@ -64,7 +64,7 @@ class Application:
         #colors.append((204, 204, 255))
         #colors.append((0, 0, 255))
 
-        # Random;wq
+        # Random
         colors.append((random.uniform(0,255), random.uniform(0,255), random.uniform(0,255)))
         colors.append((random.uniform(0,255), random.uniform(0,255), random.uniform(0,255)))
         colors.append((random.uniform(0,255), random.uniform(0,255), random.uniform(0,255)))
