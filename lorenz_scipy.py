@@ -76,12 +76,16 @@ class Application:
         self.displaySurface = None
         self.fpsClock = None
         self.attractors = []
+        #self.size = self.width, self.height = 960, 540 #Screen size
         self.size = self.width, self.height = 1920, 1080 #Full Screen
         self.count = 0
         self.outputCount = 1
+        self.pause = False
+        self.restart = False
 
     def on_init(self):
         pygame.init()
+        rgbTextFont = pygame.font.SysFont('Comic Sans MS', 30)
         pygame.display.set_caption("Lorenz Atractor")
         self.displaySurface = pygame.display.set_mode(self.size)
         self.isRunning = True
@@ -90,15 +94,21 @@ class Application:
         # Configure the attractor
         colors = []
 
-        #Blue
-        colors.append((51, 153, 255))
-        colors.append((204, 204, 255))
-        colors.append((0, 0, 255))
+        # Personal Favorite
+        #colors.append((51, 153, 255))
+        #colors.append((204, 204, 255))
+        #colors.append((0, 0, 255))
 
-        #Green
+        # Green
         #colors.append((50, 205, 50))
         #colors.append((152, 251, 152))
         #colors.append((0, 255, 255))
+
+        # Random
+        colors.append((random.uniform(0,255), random.uniform(0,255), random.uniform(0,255)))
+        colors.append((random.uniform(0,255), random.uniform(0,255), random.uniform(0,255)))
+        colors.append((random.uniform(0,255), random.uniform(0,255), random.uniform(0,255)))
+
 
         for i in range(3):
             self.attractors.append(Lorenz())
@@ -115,6 +125,15 @@ class Application:
     def on_event(self, event):
         if event.type == pygame.QUIT:
             self.isRunning = False
+
+        # Implementing pause (key p/space), restart (key r) and quit (keys/Esc) user interactions
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_p or event.key == pygame.K_SPACE:
+                self.pause = not self.pause
+            if event.key == pygame.K_r:
+                self.restart = True
+            if event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
+                self.isRunning = False
 
     def on_loop(self):
         # Call the step method for the attractor
@@ -136,19 +155,27 @@ class Application:
             for event in pygame.event.get():
                 self.on_event(event)
             
-            self.on_loop()
-            self.on_render()
+            if self.pause == False:
+                self.on_loop()
+                self.on_render()
+
+            if self.restart == True:
+                self = Application()
+                self.on_execute()
+                self.restart = False
+                self.isRunning = False
 
             self.fpsClock.tick()
             self.count += 1
 
+        # Uncomment block below to save a screenshot of finished drawing
         #pygame.image.save(self.displaySurface,"screenshot.jpg")
+        
         pygame.quit()
 
 if __name__ == "__main__":
     t = Application()
     t.on_execute()
-
 
 
 

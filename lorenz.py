@@ -46,6 +46,8 @@ class Application:
         self.size = self.width, self.height = 1920, 1080 #Full Screen
         self.count = 0
         self.outputCount = 1
+        self.pause = False
+        self.restart = False
 
     def on_init(self):
         pygame.init()
@@ -56,9 +58,17 @@ class Application:
 
         # Configure the attractor
         colors = []
-        colors.append((51, 153, 255))
-        colors.append((204, 204, 255))
-        colors.append((0, 0, 255))
+
+        # Personal Favorite
+        #colors.append((51, 153, 255))
+        #colors.append((204, 204, 255))
+        #colors.append((0, 0, 255))
+
+        # Random;wq
+        colors.append((random.uniform(0,255), random.uniform(0,255), random.uniform(0,255)))
+        colors.append((random.uniform(0,255), random.uniform(0,255), random.uniform(0,255)))
+        colors.append((random.uniform(0,255), random.uniform(0,255), random.uniform(0,255)))
+
 
         for i in range(3):
             self.attractors.append(Lorenz())
@@ -70,6 +80,15 @@ class Application:
     def on_event(self, event):
         if event.type == pygame.QUIT:
             self.isRunning = False
+
+        # Implementing pause (keys p/space), restart (ker r) and quit (keys q/Esc) user interactions
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_p or event.key == pygame.K_SPACE:
+                self.pause = not self.pause
+            if event.key == pygame.K_r:
+                self.restart = True
+            if event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
+                self.isRunning = False
 
     def on_loop(self):
         # Call the step method for the attractor
@@ -90,8 +109,15 @@ class Application:
             for event in pygame.event.get():
                 self.on_event(event)
             
-            self.on_loop()
-            self.on_render()
+            if not self.pause:
+                self.on_loop()
+                self.on_render()
+
+            if self.restart == True:
+                self = Application()
+                self.on_execute()
+                self.restart = False
+                self.isRunning = False
 
             self.fpsClock.tick()
             self.count += 1
