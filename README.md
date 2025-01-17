@@ -11,3 +11,5 @@ Press keys "q" or "Escape" to quit
 Press key "r" to restart
 
 Colors are randomized each run. Change on_init() function as desired for both files to configure colors of respective attractors.
+
+![screenshot](https://github.com/user-attachments/assets/562c66b2-f92e-4f2c-908e-38ec07dc00b5)
